@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/lateefazeez/tinyapp/issues"
   },
-  "homepage": "https://github.com/lateefazeez/tinyapp#readme"
+  "homepage": "https://github.com/lateefazeez/tinyapp#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
