@@ -58,6 +58,10 @@ app.get("/urls", (req, res) => {
 
 app.get("/urls/new", (req, res) => {
   const templateVars = { user: users[req.cookies["user_id"]]};
+  const user = templateVars.user;
+  if (!user) {
+    res.status(401).redirect("/login");
+  }
   res.render("urls_new", templateVars);
 });
 
