@@ -66,6 +66,10 @@ app.get("/register", (req, res) => {
   res.render("userRegistration", templateVars);
 });
 
+app.get("/login", (req, res) => {
+  res.render("login");
+});
+
 app.post("/register", (req, res) => {
   const id = generateRandomString();
   const email = req.body.email;
