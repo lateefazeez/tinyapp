@@ -121,7 +121,19 @@ app.post("/urls/:shortURL/edit", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-  
+  const email = req.body.email;
+  const password = req.body.password;
+
+  const user = checkUser(email);
+  if (!user) {
+    res.status(403).send("The user with the email provided does not exist");
+  }
+
+  if (user.password !== password) {
+    res.status(403).send("The password entered does not match any user");
+  }
+
+  res.cookie("user_id", user.id);
   res.redirect("/urls");
 });
 
