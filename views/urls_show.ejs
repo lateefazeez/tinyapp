@@ -13,6 +13,11 @@
 
   <body>
     <header><%-include('partials/_header') %></header>
+    <% if (!user) { %>
+    <h5>You must be Registered and logged in to view the shortened urls!</h5>
+    <% } else if (!longURL) { %>
+    <h5>The shortURL provided does not belong to this user</h5>
+    <% } else { %>
     <div class="card text-center">
       <div class="card-header"></div>
       <div class="card-body">
@@ -42,7 +47,7 @@
         </form>
       </div>
     </div>
-
+    <% } %>
     <!-- Bootstrap JS -->
     <script
       src="https://code.jquery.com/jquery-3.3.1.slim.min.js"

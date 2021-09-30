@@ -2,7 +2,6 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
-const e = require("express");
 const PORT = 8080;
 
 const generateRandomString = () => {
@@ -11,7 +10,7 @@ const generateRandomString = () => {
   let charactersLength = characters.length;
   for (let i = 0; i < 6; i++) {
     result += characters.charAt(Math.floor(Math.random() *
-charactersLength));
+    charactersLength));
   }
   return result;
 };
@@ -24,6 +23,16 @@ const checkUser = (userEmail) => {
     }
   }
   return null;
+};
+
+const urlsForUser = (id) => {
+  let urls = {};
+  for (const url in urlDatabase) {
+    const userid = urlDatabase[url].userID;
+    if (userid === id)
+      urls[url] = urlDatabase[url];
+  }
+  return urls;
 };
 
 const urlDatabase = {
@@ -59,8 +68,18 @@ app.get("/", (req, res) => {
 });
 
 app.get("/urls", (req, res) => {
-  const templateVars = { urls: urlDatabase, user: users[req.cookies["user_id"]] };
-  res.render("urls_index", templateVars);
+  // check if the user is logged in, and redirect to login page if not
+  const user = users[req.cookies["user_id"]];
+  if (!user) {
+    const templateVars = {user: null};
+    res.render("urls_index", templateVars);
+  } else {
+    // user logged in, filter through the urlDatabase and render only the shortURLs that belongs to the user
+    const urls = urlsForUser(user.id);
+    //update templateVars and render the urls page
+    const templateVars = { urls: urls, user: user };
+    res.render("urls_index", templateVars);
+  }
 });
 
 app.get("/urls/new", (req, res) => {
@@ -108,13 +127,29 @@ app.post("/urls", (req, res) => {
     "longURL": newURL,
     "userID": templateVars.user.id
   };
-  console.log(urlDatabase);
   res.redirect(`/urls/${shortURL}`);
 });
 
 app.get("/urls/:shortURL", (req, res) => {
-  const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL]["longURL"], user: users[req.cookies["user_id"]]};
-  res.render("urls_show", templateVars);
+  
+
+  // check if the user is logged in, and redirect to login page if not
+  const user = users[req.cookies["user_id"]];
+  if (!user) {
+    const templateVars = { user: null};
+    res.render("urls_index", templateVars);
+  } else {
+    const shortURL = req.params.shortURL;
+    if (urlDatabase[shortURL]["userID"] === user.id) {
+      const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL]["longURL"], user: user};
+      res.render("urls_show", templateVars);
+    } else {
+      const templateVars = { shortURL: req.params.shortURL, longURL: null, user: user};
+      res.render("urls_show", templateVars);
+    }
+    
+  }
+  
 });
 
 app.get("/u/:shortURL", (req, res) => {

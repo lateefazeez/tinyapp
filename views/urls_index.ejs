@@ -20,6 +20,7 @@
     <header><%-include('partials/_header') %></header>
     <main style="margin: 1em">
       <h3>My URLs</h3>
+      <% if (user) { %>
       <table class="table">
         <thead>
           <tr>
@@ -48,6 +49,10 @@
               </form>
             </td>
           </tr>
+          <% } %> <% } else { %>
+          <h5>
+            You must be Registered and logged in to view the shortened urls!
+          </h5>
           <% } %>
         </tbody>
       </table>
