@@ -87,8 +87,10 @@ app.get("/urls/new", (req, res) => {
   const user = templateVars.user;
   if (!user) {
     res.status(401).redirect("/login");
+  } else {
+    res.render("urls_new", templateVars);
   }
-  res.render("urls_new", templateVars);
+  
 });
 
 app.get("/register", (req, res) => {
@@ -209,10 +211,12 @@ app.post("/login", (req, res) => {
 
   if (user.password !== password) {
     res.status(403).send("The password entered does not match any user");
+  } else {
+    res.cookie("user_id", user.id);
+    res.redirect("/urls");
   }
 
-  res.cookie("user_id", user.id);
-  res.redirect("/urls");
+  
 });
 
 app.post("/logout", (req, res) => {
