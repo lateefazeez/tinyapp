@@ -17,9 +17,9 @@ const generateRandomString = () => {
   return result;
 };
 
-const checkUser = (userEmail) => {
-  for (const userId in users) {
-    const user = users[userId];
+const getUserByEmail = (userEmail, database) => {
+  for (const userId in database) {
+    const user = database[userId];
     if (user.email === userEmail) {
       return user;
     }
@@ -116,7 +116,7 @@ app.post("/register", (req, res) => {
   if (!email || !password) {
     res.status(400).send("Username and Password fields are mandatory and cannot be empty");
   }
-  const user = checkUser(email);
+  const user = getUserByEmail(email, users);
   if (user) {
     res.status(400).send("A user with that email already exists");
   }
@@ -207,7 +207,7 @@ app.post("/login", (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
 
-  const user = checkUser(email);
+  const user = getUserByEmail(email, users);
   if (!user) {
     res.status(403).send("The user with the email provided does not exist");
   }
