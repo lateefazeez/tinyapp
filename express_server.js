@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
+const bcrypt = require("bcryptjs");
 const PORT = 8080;
 
 const generateRandomString = () => {
@@ -90,7 +91,6 @@ app.get("/urls/new", (req, res) => {
   } else {
     res.render("urls_new", templateVars);
   }
-  
 });
 
 app.get("/register", (req, res) => {
@@ -111,12 +111,12 @@ app.post("/register", (req, res) => {
   if (!email || !password) {
     res.status(400).send("Username and Password fields are mandatory and cannot be empty");
   }
-
   const user = checkUser(email);
   if (user) {
     res.status(400).send("A user with that email already exists");
   }
-  users[id] = {id, email, password};
+  const hashedPassword = bcrypt.hashSync(password, 10);
+  users[id] = {id, email, password: hashedPassword};
   res.cookie("user_id", id);
   res.redirect("urls");
 });
@@ -147,9 +147,7 @@ app.get("/urls/:shortURL", (req, res) => {
       const templateVars = { shortURL: req.params.shortURL, longURL: null, user: user};
       res.render("urls_show", templateVars);
     }
-    
   }
-  
 });
 
 app.get("/u/:shortURL", (req, res) => {
@@ -186,7 +184,6 @@ app.get("/urls/:shortURL/edit", (req, res) => {
       res.redirect(`/urls/${shortURL}`);
     }
   }
-
 });
 
 app.post("/urls/:shortURL/edit", (req, res) => {
@@ -215,8 +212,6 @@ app.post("/login", (req, res) => {
     res.cookie("user_id", user.id);
     res.redirect("/urls");
   }
-
-  
 });
 
 app.post("/logout", (req, res) => {
