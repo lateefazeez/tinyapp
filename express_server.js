@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
+const e = require("express");
 const PORT = 8080;
 
 const generateRandomString = () => {
@@ -118,8 +119,13 @@ app.get("/urls/:shortURL", (req, res) => {
 
 app.get("/u/:shortURL", (req, res) => {
   const shortURL = req.params.shortURL;
-  const longURL = urlDatabase[shortURL]["longURL"];
-  res.redirect(longURL);
+  for (const url in urlDatabase) {
+    if (shortURL === url) {
+      const longURL = urlDatabase[shortURL]["longURL"];
+      res.redirect(longURL);
+    }
+  }
+  res.status(404).send("The short url entered does not exist");
 });
 
 app.post("/urls/:shortURL/delete", (req, res) => {
