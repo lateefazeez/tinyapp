@@ -117,6 +117,7 @@ app.post("/register", (req, res) => {
   }
   const hashedPassword = bcrypt.hashSync(password, 10);
   users[id] = {id, email, password: hashedPassword};
+  console.log(users);
   res.cookie("user_id", id);
   res.redirect("urls");
 });
@@ -206,7 +207,9 @@ app.post("/login", (req, res) => {
     res.status(403).send("The user with the email provided does not exist");
   }
 
-  if (user.password !== password) {
+  const checkPassword = bcrypt.compareSync(password, user.password);
+
+  if (checkPassword === false) {
     res.status(403).send("The password entered does not match any user");
   } else {
     res.cookie("user_id", user.id);
