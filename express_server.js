@@ -131,8 +131,6 @@ app.post("/urls", (req, res) => {
 });
 
 app.get("/urls/:shortURL", (req, res) => {
-  
-
   // check if the user is logged in, and redirect to login page if not
   const user = users[req.cookies["user_id"]];
   if (!user) {
@@ -164,12 +162,36 @@ app.get("/u/:shortURL", (req, res) => {
 });
 
 app.post("/urls/:shortURL/delete", (req, res) => {
-  const shortURL = req.params.shortURL;
-  delete urlDatabase[shortURL];
-  res.redirect("/urls");
+  const user = users[req.cookies["user_id"]];
+  if (!user) {
+    res.status(401).send("<html><body><h5>You must be logged in to delete these urls</h5></body></html>\n");
+  } else {
+    const shortURL = req.params.shortURL;
+    if (urlDatabase[shortURL].userID === user.id) {
+      delete urlDatabase[shortURL];
+      res.redirect("/urls");
+    }
+  }
+});
+
+app.get("/urls/:shortURL/edit", (req, res) => {
+  const user = users[req.cookies["user_id"]];
+  if (!user) {
+    res.status(401).send("<html><body><h5>You must be logged in to edit this url</h5></body></html>\n");
+  } else {
+    const shortURL = req.params.shortURL;
+    if (urlDatabase[shortURL].userID === user.id) {
+      res.redirect(`/urls/${shortURL}`);
+    }
+  }
+
 });
 
 app.post("/urls/:shortURL/edit", (req, res) => {
+  const user = users[req.cookies["user_id"]];
+  if (!user) {
+    res.status(401).send("<html><body><h5>You must be logged in to edit this url</h5></body></html>\n");
+  }
   const newURL = req.body.longURL;
   const shortURL = req.params.shortURL;
   urlDatabase[shortURL]["longURL"] = newURL;
