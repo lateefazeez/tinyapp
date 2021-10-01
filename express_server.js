@@ -94,6 +94,9 @@ app.post("/urls", (req, res) => {
   const shortURL = generateRandomString();
   const templateVars = { user: users[req.session.userId]};
 
+  if (!newURL) {
+    return res.status(401).send("Please enter a valid url to <a href='/register'> continue </a>");
+  }
   //create a new short URL
   urlDatabase[shortURL] = {
     "longURL": newURL,

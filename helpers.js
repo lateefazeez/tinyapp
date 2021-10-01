@@ -13,11 +13,13 @@ const getCreatedDate = () => {
   let day = dateCreated.getDate();
   let month = dateCreated.getMonth();
   let year = dateCreated.getFullYear();
+  let time = dateCreated.toLocaleTimeString('en-US');
+  
 
   if (day < 10) day = `0${day}`;
   if (month < 10) month = `0${month}`;
 
-  return `${month}/${day}/${year}`;
+  return `${month}/${day}/${year} - ${time}`;
 };
 
 const generateRandomString = () => {
