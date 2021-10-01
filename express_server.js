@@ -3,6 +3,7 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 const bcrypt = require("bcryptjs");
+const methodOverride = require("method-override");
 const PORT = 8080;
 
 const getUserByEmail = require('./helpers').getUserByEmail;
@@ -49,8 +50,9 @@ app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieSession({
   name: 'session',
-  keys: ['user_id', 'visited']
+  keys: ['user_id']
 }));
+app.use(methodOverride('_method'));
 
 
 /* GET "/" */
@@ -92,7 +94,7 @@ app.post("/urls", (req, res) => {
   const shortURL = generateRandomString();
   const templateVars = { user: users[req.session.userId]};
 
-  //create a short URL
+  //create a new short URL
   urlDatabase[shortURL] = {
     "longURL": newURL,
     "userID": templateVars.user["id"],
@@ -225,8 +227,8 @@ app.get("/u/:shortURL", (req, res) => {
 });
 
 
-/* POST "/URLS/SHORTURL/DELETE" */
-app.post("/urls/:shortURL/delete", (req, res) => {
+/* DELETE "/URLS/SHORTURL/DELETE" */
+app.delete("/urls/:shortURL/", (req, res) => {
   const user = users[req.session.userId];
   if (!user) {
     res.status(401).send("You must be logged in to delete these urls. Please <a href='/login'> Login</a>");
@@ -255,7 +257,7 @@ app.get("/urls/:shortURL/edit", (req, res) => {
 
 
 /* POST "/URLS/SHORTURL/EDIT" */
-app.post("/urls/:shortURL/edit", (req, res) => {
+app.put("/urls/:shortURL/", (req, res) => {
   const user = users[req.session.userId];
   if (!user) {
     return res.status(401).send("You must be logged in to edit this url. Please <a href='/login'> Login</a>");
