@@ -6,44 +6,10 @@ const bcrypt = require("bcryptjs");
 const methodOverride = require("method-override");
 const PORT = 8080;
 
-const getUserByEmail = require('./helpers').getUserByEmail;
-const getCreatedDate = require('./helpers').getCreatedDate;
-const generateRandomString = require('./helpers').generateRandomString;
-const urlsForUser = require('./helpers').urlsForUser;
+const { getUserByEmail, getCreatedDate, generateRandomString, urlsForUser } = require('./helpers');
+const urlDatabase = require('./database/urlDatabase');
+const users = require('./database/users');
 
-
-/* THE URL DATABASE */
-const urlDatabase = {
-  b6UTxQ: {
-    longURL: "https://www.tsn.ca",
-    userID: "aJ48lW",
-    dateCreated: '06/23/2019',
-    visited: 2,
-    uniqueVisits: 1
-  },
-  i3BoGr: {
-    longURL: "https://www.google.ca",
-    userID: "aJ48lW",
-    dateCreated: '06/23/2019',
-    visited: 2,
-    uniqueVisits: 1
-  }
-};
-
-
-/* THE USERS DATABASE */
-const users = {
-  "userRandomID": {
-    id: "userRandomID",
-    email: "user@example.com",
-    password: "purple-monkey-dinosaur"
-  },
-  "user2RandomID": {
-    id: "user2RandomID",
-    email: "user2@example.com",
-    password: "dishwasher-funk"
-  }
-};
 
 /* THE MIDDLEWARES */
 app.set("view engine", "ejs");
