@@ -22,29 +22,36 @@
     <!-- <%- include('partials/_header') %> -->
 
     <main style="margin: 1em">
-      <h3>Create Account</h3>
-      <form class="form-inline" action="/register" method="POST">
-        <div class="form-group mb-2">
-          <label for="email">Email: </label>
-          <input
-            class="form-control"
-            type="email"
-            name="email"
-            placeholder="you@example.com"
-            style="width: 300px; margin: 1em"
-          />
-          <label for="email">Password: </label>
-          <input
-            class="form-control"
-            type="password"
-            name="password"
-            style="width: 300px; margin: 1em"
-          />
-          <button type="submit" class="btn btn-primary">Register</button>
-        </div>
-      </form>
-      <h4>Already registered?</h4>
-      <h5>Login <a href="/login">here</a></h5>
+      <div class="container">
+        <h3>Create Account</h3>
+        <form action="/register" method="POST">
+          <div class="form-group">
+            <label for="email">Email address</label>
+            <input
+              class="form-control"
+              type="email"
+              name="email"
+              placeholder="you@example.com"
+              style="width: 300px"
+            />
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input
+              class="form-control"
+              type="password"
+              name="password"
+              style="width: 300px"
+              placeholder="Password"
+            />
+          </div>
+          <button type="submit" class="btn btn-primary mb-3">Register</button>
+          <div class="form-group mb-2">
+            <h5>Already registered?</h5>
+            <h6>Login <a href="/login">here</a></h6>
+          </div>
+        </form>
+      </div>
     </main>
     <!-- Bootstrap JS -->
     <script
