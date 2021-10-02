@@ -1,7 +1,7 @@
 {
   "name": "tinyapp",
   "version": "1.0.0",
-  "description": "",
+  "description": "This is a full stack web application built with Node and Express that allows users to shorten long URLs (à la bit.ly).",
   "main": "index.js",
   "scripts": {
     "test": "mocha",
@@ -12,7 +12,7 @@
     "url": "git+https://github.com/lateefazeez/tinyapp.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "lateef azeez",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/lateefazeez/tinyapp/issues"

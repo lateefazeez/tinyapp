@@ -11,7 +11,7 @@ const urlDatabase = require('./database/urlDatabase');
 const users = require('./database/users');
 
 
-/* THE MIDDLEWARES */
+
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieSession({
@@ -21,7 +21,6 @@ app.use(cookieSession({
 app.use(methodOverride('_method'));
 
 
-/* GET "/" */
 app.get("/", (req, res) => {
   // check if the user is logged in, and redirect to login page if not
   const user = users[req.session.userId];
@@ -37,7 +36,7 @@ app.get("/", (req, res) => {
 });
 
 
-/* GET "/URLS" */
+
 app.get("/urls", (req, res) => {
   // check if the user is logged in, and redirect to login page if not
   const user = users[req.session.userId];
@@ -54,7 +53,6 @@ app.get("/urls", (req, res) => {
 });
 
 
-/* POST "/URLS" */
 app.post("/urls", (req, res) => {
   const newURL = req.body.longURL;
   const shortURL = generateRandomString();
@@ -75,7 +73,7 @@ app.post("/urls", (req, res) => {
 });
 
 
-/* GET "/URLS/NEW" */
+
 app.get("/urls/new", (req, res) => {
   const templateVars = { user: users[req.session.userId]};
   const user = templateVars.user;
@@ -87,7 +85,6 @@ app.get("/urls/new", (req, res) => {
 });
 
 
-/* GET "/REGISTER" */
 app.get("/register", (req, res) => {
   const templateVars = { user: users[req.session.userId], urls: null};
   const user = templateVars.user;
@@ -103,7 +100,6 @@ app.get("/register", (req, res) => {
 });
 
 
-/* POST "/REGISTER" */
 app.post("/register", (req, res) => {
   const id = generateRandomString();
   const email = req.body.email;
@@ -124,14 +120,12 @@ app.post("/register", (req, res) => {
 });
 
 
-/* GET "/LOGIN" */
 app.get("/login", (req, res) => {
   const templateVars = { user: users[req.session.userId]};
   res.render("login", templateVars);
 });
 
 
-/* POST "/LOGIN" */
 app.post("/login", (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
@@ -153,7 +147,6 @@ app.post("/login", (req, res) => {
 });
 
 
-/* GET "/URLS/SHORTURL" */
 app.get("/urls/:shortURL", (req, res) => {
   // check if the user is logged in, and redirect to login page if not
   const user = users[req.session.userId];
@@ -182,7 +175,7 @@ app.get("/urls/:shortURL", (req, res) => {
 });
 
 
-/* GET "/U/SHORTURL" */
+
 app.get("/u/:shortURL", (req, res) => {
   const shortURL = req.params.shortURL;
   for (const url in urlDatabase) {
@@ -196,7 +189,6 @@ app.get("/u/:shortURL", (req, res) => {
 });
 
 
-/* DELETE "/URLS/SHORTURL/DELETE" */
 app.delete("/urls/:shortURL/", (req, res) => {
   const user = users[req.session.userId];
   if (!user) {
@@ -211,7 +203,6 @@ app.delete("/urls/:shortURL/", (req, res) => {
 });
 
 
-/* GET "/URLS/SHORTURL/EDIT" */
 app.get("/urls/:shortURL/edit", (req, res) => {
   const user = users[req.session.userId];
   if (!user) {
@@ -225,7 +216,6 @@ app.get("/urls/:shortURL/edit", (req, res) => {
 });
 
 
-/* POST "/URLS/SHORTURL/EDIT" */
 app.put("/urls/:shortURL/", (req, res) => {
   const user = users[req.session.userId];
   if (!user) {
@@ -242,7 +232,7 @@ app.put("/urls/:shortURL/", (req, res) => {
 });
 
 
-/* POST "/LOGOUT" */
+
 app.post("/logout", (req, res) => {
   req.session = null;
   res.redirect("/urls");
